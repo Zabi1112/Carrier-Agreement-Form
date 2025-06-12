@@ -2,62 +2,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Carrier Agreement - Submit</title>
+  <meta charset="UTF-8" />
+  <title>Carrier Agreement</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background: #f4f4f4;
+      background: #f5f5f5;
       margin: 0;
-      padding: 40px;
+      padding: 30px;
       color: #333;
     }
     .container {
       background: #fff;
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
-      padding: 30px;
+      padding: 40px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    h1 {
+    h1, h2 {
       text-align: center;
+    }
+    p {
+      line-height: 1.6;
+    }
+    ul {
+      padding-left: 20px;
     }
     .signature-block {
       margin-top: 30px;
     }
-    input[type='text'], input[type='hidden'] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      margin-bottom: 20px;
-      font-size: 16px;
-    }
     #signaturePreview {
       font-family: 'Pacifico', cursive;
-      font-size: 26px;
+      font-size: 24px;
       padding: 10px;
       border: 1px dashed #ccc;
       margin-bottom: 20px;
     }
-    button {
-      padding: 12px 24px;
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
       font-size: 16px;
+    }
+    button {
+      padding: 12px 20px;
       background-color: #1976d2;
       color: white;
+      font-size: 16px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
     button:hover {
-      background-color: #0f5db3;
+      background-color: #0d47a1;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Sign the Carrier Agreement</h1>
+    <h1>Freight Dispatch Agreement</h1>
+    <p>This Freight Dispatch Agreement, (the "Agreement") is effective on the 5th day of January 2024, by and between:</p>
+    <p><strong>GET MOVING LOGISTICS</strong> (hereinafter known as "Dispatch" or "Dispatcher")<br/>
+    <strong>TAYLOR GLOBAL ENTERPRISES LLC</strong> (hereinafter known as "Carrier").</p>
+    
+    <p>WHEREAS, the Dispatch, desires to enter into an agreement with Carrier for Freight Dispatch.</p>
+    <p>WHEREAS, the Carrier, a licensed interstate carrier of property holding authority by the FMCSA, with MC # 1525578 agrees to enter into an agreement with the Dispatch herein.</p>
+    <p>WHEREAS, the Dispatch and the Carrier agree to the following terms and conditions:</p>
+    
+    <h2>DOCUMENTATION:</h2>
+    <p>Client must furnish to Get Moving Logistics LLC the documents mentioned below:</p>
+    <ul>
+      <li>MC Authority Letter</li>
+      <li>Certificate of Insurance</li>
+      <li>W-9 Form</li>
+      <li>NOA (Notice of assignment) which is your factoring document.</li>
+    </ul>
+
+    <h2>CARRIER RESPONSIBILITIES:</h2>
+    <p>Carrier shall be responsible in all the necessary documentary and legal compliance with its operations as a carrier and assumes to be legally liable for any loss, damage, delay, destruction, theft, or any liability of whatever nature arises from the transportation of any freight as contemplated and falling under this agreement...</p>
+
+    <h2>FEE:</h2>
+    <p>The Carrier agrees to pay the Dispatcher 6% of the loads that the Dispatcher has provided as part of their services. The payment will be charged to the Carrier on a weekly basis.</p>
+
+    <h2>RELATIONSHIP & RESPONSIBILITIES:</h2>
+    <p>The relationship between the parties shall be of an independent contractor...</p>
+    <ul>
+      <li>Find freight that best matches profile for the Client and negotiate pay rates</li>
+      <li>Credit checks the broker</li>
+      <li>Route planning</li>
+      <li>...and more</li>
+    </ul>
+
+    <h2>TERMS / TERMINATION / DAMAGES / ETC:</h2>
+    <p>This agreement starts on the date both parties sign it and will be in effect for one year... Either party can end this agreement with 7 days written notice.</p>
+
+    <h2>DISPATCH REPRESENTATIVE:</h2>
+    <p><strong>Name:</strong> Sagheer Ahmed<br/>
+    <strong>Company:</strong> GET MOVING LOGISTICS<br/>
+    <strong>Signature:</strong> <span style="font-family: 'Pacifico', cursive;">Sagheer Ahmed</span></p>
+
+    <h2>CARRIER REPRESENTATIVE:</h2>
     <form id="agreementForm" action="https://formsubmit.co/warraichzabiullah@gmail.com" method="POST">
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_subject" value="Carrier Agreement Form Response">
@@ -65,10 +111,8 @@
       <input type="hidden" name="_next" id="_next" value="">
 
       <label for="carrierName">Your Full Name (as Signature):</label>
-      <input type="text" name="Carrier Name" id="carrierName" placeholder="Type your full name" oninput="updateSignature()">
-
+      <input type="text" name="Carrier Name" id="carrierName" placeholder="Type your full name" oninput="updateSignature()" required>
       <div id="signaturePreview"></div>
-
       <button type="button" onclick="handleSubmit()">Submit Agreement</button>
     </form>
   </div>
@@ -83,18 +127,17 @@
       const name = document.getElementById('carrierName').value.trim();
       const statusInput = document.getElementById('formStatus');
       const nextInput = document.getElementById('_next');
+      const form = document.getElementById('agreementForm');
 
       if (!name) {
-        // rejected
         statusInput.value = "Rejected";
         nextInput.value = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
-        document.getElementById('agreementForm').submit();
       } else {
-        // signed
         statusInput.value = "Signed";
         nextInput.value = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
-        document.getElementById('agreementForm').submit();
       }
+
+      form.submit();
     }
   </script>
 </body>
