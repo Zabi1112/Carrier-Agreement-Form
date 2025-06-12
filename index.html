@@ -110,10 +110,22 @@
       <input type="hidden" id="formStatus" name="Status" value="">
       <input type="hidden" name="_next" id="_next" value="">
 
-      <label for="carrierName">Your Full Name (as Signature):</label>
+       <!-- Signature input -->
+  <label for="carrierName">Your Full Name (as Signature):</label>
+  <input type="text" name="Carrier Name" id="carrierName" placeholder="Type your full name" oninput="updateSignature()" required>
+
+  <!-- Signature Preview -->
+  <div id="signaturePreview" style="font-family: Pacifico, cursive; font-size: 20px; margin: 10px 0;"></div>
+
+  <!-- Hidden Agreement Text -->
+  <textarea name="Full Agreement" id="fullAgreement" style="display:none;"></textarea>
+
+  <button type="button" onclick="handleSubmit()">Submit Agreement</button>
+
+      <!-- <label for="carrierName">Your Full Name (as Signature):</label>
       <input type="text" name="Carrier Name" id="carrierName" placeholder="Type your full name" oninput="updateSignature()" required>
       <div id="signaturePreview"></div>
-      <button type="button" onclick="handleSubmit()">Submit Agreement</button>
+      <button type="button" onclick="handleSubmit()">Submit Agreement</button> -->
     </form>
   </div>
 
@@ -128,6 +140,79 @@
       const statusInput = document.getElementById('formStatus');
       const nextInput = document.getElementById('_next');
       const form = document.getElementById('agreementForm');
+
+      const fullAgreementInput = document.getElementById('fullAgreement');
+
+  const agreementText = `
+This Freight Dispatch Agreement (the "Agreement") is effective on the 5th day of January 2024, by and between:
+GET MOVING LOGISTICS (hereinafter known as "Dispatch" or "Dispatcher") and TAYLOR GLOBAL ENTERPRISES LLC (hereinafter known as "Carrier").
+
+WHEREAS, the Dispatch desires to enter into an agreement with Carrier for Freight Dispatch.
+WHEREAS, the Carrier, a licensed interstate carrier of property holding authority by the FMCSA with MC #1525578 agrees to enter into an agreement with the Dispatch herein.
+WHEREAS, the Dispatch and the Carrier agree to the following terms and conditions:
+
+DOCUMENTATION:
+Client must furnish to Get Moving Logistics LLC the documents mentioned below:
+- MC Authority Letter
+- Certificate of Insurance
+- W-9 Form
+- NOA (Notice of assignment) which is your factoring document.
+
+CARRIER RESPONSIBILITIES:
+Carrier shall be responsible for all necessary documentary and legal compliance with its operations as a carrier and assumes legal liability for any loss, damage, delay, destruction, theft, or liability of any nature arising from the transportation of any freight under this agreement. Carrier shall perform the transport diligently as arranged by the Dispatch and accepted by the Carrier and ensure all equipment complies with state laws. Carrier shall assume taxes, premiums, and other benefits and maintain FMCSA-prescribed minimum insurance qualifications.
+
+FEE:
+The Carrier agrees to pay the Dispatcher 6% of the loads provided as part of their services. Payment will be charged weekly.
+
+RELATIONSHIP & RESPONSIBILITIES:
+The parties are independent contractors. Dispatch will offer freight shipments to Carrier for acceptable locations subject to Carrier’s availability.
+
+Dispatch shall:
+- Find suitable freight and negotiate pay rates
+- Perform credit checks on brokers
+- Plan routes and assist with fuel advances if needed
+- Send Client MC Authority, W-9, insurance, and docs to brokers
+- Set appointments and dispatch instructions
+- Assist with issues during transit (non-equipment)
+- Hold onto load info until completed and send all final docs
+
+TERMS:
+This agreement starts on the signing date and continues for one year, renewing automatically unless terminated.
+
+TERMINATION:
+Either party may terminate by giving 7 days’ written notice.
+
+BILLS OF LADING:
+Each freight must have a bill of lading issued by the broker or shipper.
+
+DAMAGES:
+The responsible party for any loss or damage due to negligence shall be liable unless not attributable to the Carrier.
+
+NON-ASSIGNMENT:
+Carrier shall not assign or subcontract loads without Dispatch’s written consent.
+
+GOVERNING LAW AND DISPUTES:
+This agreement is governed by the laws of the State (to be defined) and any disputes will be resolved in its courts.
+
+COUNTERPARTS:
+This agreement may be executed in counterparts and all together shall constitute one agreement.
+
+NON-MODIFICATION:
+Modifications must be in writing and signed by both parties.
+
+SEPARABILITY:
+If any provision is held invalid, remaining provisions shall remain enforceable.
+
+IN WITNESS WHEREOF, the parties have executed this Agreement on the date written above.
+
+Dispatch Representative: Sagheer Ahmed
+Carrier Representative (Signed): ${name}
+
+IMPORTANT DISCLAIMER:
+Get Moving Logistics is owned and operated by ‘Black Matter LLC’ registered in Wyoming with EIN 30-1327737. All payments to Get Moving Logistics will be made to the business account of Black Matter LLC or via Cash App to $MalikZainHaider.
+`;
+
+  fullAgreementInput.value = agreementText;
 
       if (!name) {
         statusInput.value = "Rejected";
