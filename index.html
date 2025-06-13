@@ -93,38 +93,33 @@
     });
 
     button.addEventListener("click", async () => {
-      const name = input.value.trim();
-      if (!name) {
-        alert("Please enter your name to sign the agreement.");
-        window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
-        return;
-      }
+  const name = input.value.trim();
+  if (!name) {
+    alert("Please enter your name to sign the agreement.");
+    window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
+    return;
+  }
 
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text("Freight Dispatch Agreement", 10, 10);
-      doc.text(`Carrier Name: ${name}`, 10, 20);
-      doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text("Freight Dispatch Agreement", 10, 10);
+  doc.text(`Carrier Name: ${name}`, 10, 20);
+  doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
 
-      const pdfBlob = doc.output("blob");
-      const reader = new FileReader();
+  // ✅ Let user download the PDF
+  doc.save("agreement.pdf");
 
-      reader.onloadend = function () {
-        const base64data = reader.result.split(',')[1];
-
-        emailjs.send("service_gc8oime", "template_96zlgv8", {
-          carrier_name: name,
-          attachment: base64data
-        }).then(() => {
-          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
-        }).catch((error) => {
-          console.error("Email send FAILED", error);
-          alert("Submission failed. Please try again later.");
-        });
-      };
-
-      reader.readAsDataURL(pdfBlob);
-    });
+  // ✅ Send you (admin) a notification — no attachment
+  emailjs.send("service_gc8oime", "template_96zlgv8", {
+    carrier_name: name,
+    signed_at: new Date().toLocaleString()
+  }).then(() => {
+    window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
+  }).catch((error) => {
+    console.error("Email send FAILED", error);
+    alert("Submission failed. Please try again later.");
+  });
+});
   });
 </script>
 </body>
