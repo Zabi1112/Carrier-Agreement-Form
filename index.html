@@ -76,54 +76,54 @@
     </form>
   </div>
 
-  <script type="module">
-    import emailjs from 'https://cdn.emailjs.com/dist/email.min.mjs';
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    emailjs.init('IrTm0Re0aqHJDhTxA'); // ✅ Your EmailJS public key
 
-    window.addEventListener('DOMContentLoaded', () => {
-      emailjs.init('IrTm0Re0aqHJDhTxA'); // ✅ Your EmailJS public key
+    const input = document.getElementById("carrierName");
+    const preview = document.getElementById("signaturePreview");
+    const button = document.getElementById("submitBtn");
 
-      const input = document.getElementById("carrierName");
-      const preview = document.getElementById("signaturePreview");
-      const button = document.getElementById("submitBtn");
-
-      input.addEventListener("input", () => {
-        preview.textContent = input.value;
-      });
-
-      button.addEventListener("click", async () => {
-        const name = input.value.trim();
-        if (!name) {
-          alert("Please enter your name to sign the agreement.");
-          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
-          return;
-        }
-
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text("Freight Dispatch Agreement", 10, 10);
-        doc.text(`Carrier Name: ${name}`, 10, 20);
-        doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
-
-        const pdfBlob = doc.output("blob");
-        const reader = new FileReader();
-
-        reader.onloadend = function () {
-          const base64data = reader.result.split(',')[1];
-
-          emailjs.send("service_gc8oime", "template_96zlgv8", {
-            carrier_name: name,
-            attachment: base64data
-          }).then(() => {
-            window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
-          }).catch((error) => {
-            console.error("Email send FAILED", error);
-            alert("Submission failed. Please try again later.");
-          });
-        };
-
-        reader.readAsDataURL(pdfBlob);
-      });
+    input.addEventListener("input", () => {
+      preview.textContent = input.value;
     });
-  </script>
+
+    button.addEventListener("click", async () => {
+      const name = input.value.trim();
+      if (!name) {
+        alert("Please enter your name to sign the agreement.");
+        window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("Freight Dispatch Agreement", 10, 10);
+      doc.text(`Carrier Name: ${name}`, 10, 20);
+      doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
+
+      const pdfBlob = doc.output("blob");
+      const reader = new FileReader();
+
+      reader.onloadend = function () {
+        const base64data = reader.result.split(',')[1];
+
+        emailjs.send("service_gc8oime", "template_96zlgv8", {
+          carrier_name: name,
+          attachment: base64data
+        }).then(() => {
+          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
+        }).catch((error) => {
+          console.error("Email send FAILED", error);
+          alert("Submission failed. Please try again later.");
+        });
+      };
+
+      reader.readAsDataURL(pdfBlob);
+    });
+  });
+</script>
+
 </body>
 </html>
