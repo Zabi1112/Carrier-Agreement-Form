@@ -1,10 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Carrier Agreement</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Pacifico&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    emailjs.init("IrTm0Re0aqHJDhTxA"); // Replace this with your EmailJS Public Key
+  </script>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -66,11 +70,11 @@
     <p>This Freight Dispatch Agreement, (the "Agreement") is effective on the 5th day of January 2024, by and between:</p>
     <p><strong>GET MOVING LOGISTICS</strong> (hereinafter known as "Dispatch" or "Dispatcher")<br/>
     <strong>TAYLOR GLOBAL ENTERPRISES LLC</strong> (hereinafter known as "Carrier").</p>
-    
+
     <p>WHEREAS, the Dispatch, desires to enter into an agreement with Carrier for Freight Dispatch.</p>
     <p>WHEREAS, the Carrier, a licensed interstate carrier of property holding authority by the FMCSA, with MC # 1525578 agrees to enter into an agreement with the Dispatch herein.</p>
     <p>WHEREAS, the Dispatch and the Carrier agree to the following terms and conditions:</p>
-    
+
     <h2>DOCUMENTATION:</h2>
     <p>Client must furnish to Get Moving Logistics LLC the documents mentioned below:</p>
     <ul>
@@ -104,12 +108,7 @@
     <strong>Signature:</strong> <span style="font-family: 'Pacifico', cursive;">Sagheer Ahmed</span></p>
 
     <h2>CARRIER REPRESENTATIVE:</h2>
-    <form id="agreementForm" action="https://formsubmit.co/warraichzabiullah@gmail.com" method="POST">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_subject" value="Carrier Agreement Form Response">
-      <input type="hidden" id="formStatus" name="Status" value="">
-      <input type="hidden" name="_next" id="_next" value="">
-
+    <form id="agreementForm">
       <label for="carrierName">Your Full Name (as Signature):</label>
       <input type="text" name="Carrier Name" id="carrierName" placeholder="Type your full name" oninput="updateSignature()" required>
       <div id="signaturePreview"></div>
@@ -123,21 +122,39 @@
       document.getElementById('signaturePreview').textContent = name;
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
       const name = document.getElementById('carrierName').value.trim();
-      const statusInput = document.getElementById('formStatus');
-      const nextInput = document.getElementById('_next');
-      const form = document.getElementById('agreementForm');
 
       if (!name) {
-        statusInput.value = "Rejected";
-        nextInput.value = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
-      } else {
-        statusInput.value = "Signed";
-        nextInput.value = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
+        window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
+        return;
       }
 
-      form.submit();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.text("Freight Dispatch Agreement", 10, 10);
+      doc.text(`Carrier Name: ${name}`, 10, 20);
+      doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
+
+      const pdfBlob = doc.output("blob");
+      const reader = new FileReader();
+
+      reader.onloadend = function () {
+        const base64data = reader.result.split(',')[1];
+
+        emailjs.send("service_gc8oime", "template_96zlgv8", {
+          carrier_name: name,
+          attachment: base64data
+        }).then(() => {
+          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
+        }, (error) => {
+          console.error("FAILED...", error);
+          alert("Submission failed. Try again.");
+        });
+      };
+
+      reader.readAsDataURL(pdfBlob);
     }
   </script>
 </body>
