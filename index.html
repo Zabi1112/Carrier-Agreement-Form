@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,7 +70,7 @@
     <h2>CARRIER REPRESENTATIVE:</h2>
     <form id="agreementForm">
       <label for="carrierName">Your Full Name (as Signature):</label>
-      <input type="text" id="carrierName" placeholder="Type your full name" required>
+      <input type="text" id="carrierName" name="carrier_name" placeholder="Type your full name" required>
       <div id="signaturePreview"></div>
       <button type="button" id="submitBtn">Submit Agreement</button>
     </form>
@@ -79,9 +78,10 @@
 
   <script type="module">
     import emailjs from 'https://cdn.emailjs.com/dist/email.min.mjs';
-    emailjs.init('IrTm0Re0aqHJDhTxA');
 
     window.addEventListener('DOMContentLoaded', () => {
+      emailjs.init('IrTm0Re0aqHJDhTxA'); // ✅ Your EmailJS public key
+
       const input = document.getElementById("carrierName");
       const preview = document.getElementById("signaturePreview");
       const button = document.getElementById("submitBtn");
@@ -93,6 +93,7 @@
       button.addEventListener("click", async () => {
         const name = input.value.trim();
         if (!name) {
+          alert("Please enter your name to sign the agreement.");
           window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
           return;
         }
@@ -108,14 +109,15 @@
 
         reader.onloadend = function () {
           const base64data = reader.result.split(',')[1];
+
           emailjs.send("service_gc8oime", "template_96zlgv8", {
             carrier_name: name,
             attachment: base64data
           }).then(() => {
             window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
           }).catch((error) => {
-            console.error("FAILED", error);
-            alert("Submission failed. Try again.");
+            console.error("Email send FAILED", error);
+            alert("Submission failed. Please try again later.");
           });
         };
 
