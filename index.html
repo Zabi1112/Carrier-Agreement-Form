@@ -144,8 +144,8 @@
         const base64data = reader.result.split(',')[1];
 
         emailjs.send("service_gc8oime", "template_96zlgv8", {
-          carrier_name: name,
-          attachment: base64data
+          carrier_name: "Test Carrier Name", //name
+         // attachment: base64data
         }).then(() => {
           window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
         }, (error) => {
