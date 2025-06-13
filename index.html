@@ -145,7 +145,6 @@
       made to the Business Account of Black Matter LLC or via the Cash App to the handle <strong>$SagheerAhmed</strong>.
     </p>
 
-    <h2>CARRIER REPRESENTATIVE:</h2>
     <form id="agreementForm">
       <label for="carrierName">Your Full Name (as Signature):</label>
       <input type="text" id="carrierName" name="carrier_name" placeholder="Type your full name" required>
@@ -180,10 +179,15 @@
 
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+        const pacifico = "Pacifico";
         doc.setFontSize(10);
 
-        const content = container.innerText + `\n\nDispatcher Name: Sagheer Ahmed\nDispatcher Signature: Sagheer Ahmed\nCarrier Name: ${name}\nCarrier Signature: ${name}`;
-        const lines = doc.splitTextToSize(content, 520);
+        let textContent = "";
+        document.querySelectorAll('.container p, .container ul, .container h3').forEach((el) => {
+          textContent += el.innerText + "\n\n";
+        });
+
+        const lines = doc.splitTextToSize(textContent, 520);
         let y = 40;
         lines.forEach(line => {
           if (y > 780) {
@@ -193,6 +197,20 @@
           doc.text(line, 40, y);
           y += 14;
         });
+
+        // Signatures block
+        y += 30;
+        doc.setFont("helvetica", "bold");
+        doc.text("Dispatcher Name: Sagheer Ahmed", 40, y);
+        y += 20;
+        doc.setFont("Pacifico");
+        doc.text("Sagheer Ahmed", 40, y);
+
+        doc.setFont("helvetica", "bold");
+        doc.text(`Carrier Name: ${name}`, 350, y - 20);
+        y += 20;
+        doc.setFont("Pacifico");
+        doc.text(`${name}`, 350, y);
 
         doc.save("Freight_Dispatch_Agreement.pdf");
 
