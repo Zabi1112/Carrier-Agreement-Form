@@ -30,9 +30,6 @@
     ul {
       padding-left: 20px;
     }
-    .signature-block {
-      margin-top: 30px;
-    }
     #signaturePreview {
       font-family: 'Pacifico', cursive;
       font-size: 24px;
@@ -63,40 +60,7 @@
 <body>
   <div class="container">
     <h1>Freight Dispatch Agreement</h1>
-    <p>This Freight Dispatch Agreement, (the "Agreement") is effective on the 5th day of January 2024, by and between:</p>
-    <p><strong>GET MOVING LOGISTICS</strong> (hereinafter known as "Dispatch" or "Dispatcher")<br/>
-    <strong>TAYLOR GLOBAL ENTERPRISES LLC</strong> (hereinafter known as "Carrier").</p>
-
-    <p>WHEREAS, the Dispatch, desires to enter into an agreement with Carrier for Freight Dispatch.</p>
-    <p>WHEREAS, the Carrier, a licensed interstate carrier of property holding authority by the FMCSA, with MC # 1525578 agrees to enter into an agreement with the Dispatch herein.</p>
-    <p>WHEREAS, the Dispatch and the Carrier agree to the following terms and conditions:</p>
-
-    <h2>DOCUMENTATION:</h2>
-    <p>Client must furnish to Get Moving Logistics LLC the documents mentioned below:</p>
-    <ul>
-      <li>MC Authority Letter</li>
-      <li>Certificate of Insurance</li>
-      <li>W-9 Form</li>
-      <li>NOA (Notice of assignment) which is your factoring document.</li>
-    </ul>
-
-    <h2>CARRIER RESPONSIBILITIES:</h2>
-    <p>Carrier shall be responsible in all the necessary documentary and legal compliance with its operations as a carrier and assumes to be legally liable for any loss, damage, delay, destruction, theft, or any liability of whatever nature arises from the transportation of any freight as contemplated and falling under this agreement...</p>
-
-    <h2>FEE:</h2>
-    <p>The Carrier agrees to pay the Dispatcher 6% of the loads that the Dispatcher has provided as part of their services. The payment will be charged to the Carrier on a weekly basis.</p>
-
-    <h2>RELATIONSHIP & RESPONSIBILITIES:</h2>
-    <p>The relationship between the parties shall be of an independent contractor...</p>
-    <ul>
-      <li>Find freight that best matches profile for the Client and negotiate pay rates</li>
-      <li>Credit checks the broker</li>
-      <li>Route planning</li>
-      <li>...and more</li>
-    </ul>
-
-    <h2>TERMS / TERMINATION / DAMAGES / ETC:</h2>
-    <p>This agreement starts on the date both parties sign it and will be in effect for one year... Either party can end this agreement with 7 days written notice.</p>
+    <p>This agreement is between <strong>GET MOVING LOGISTICS</strong> and <strong>TAYLOR GLOBAL ENTERPRISES LLC</strong>.</p>
 
     <h2>DISPATCH REPRESENTATIVE:</h2>
     <p><strong>Name:</strong> Sagheer Ahmed<br/>
@@ -106,55 +70,57 @@
     <h2>CARRIER REPRESENTATIVE:</h2>
     <form id="agreementForm">
       <label for="carrierName">Your Full Name (as Signature):</label>
-      <input type="text" name="Carrier Name" id="carrierName" placeholder="Type your full name" oninput="updateSignature()" required>
+      <input type="text" id="carrierName" placeholder="Type your full name" required>
       <div id="signaturePreview"></div>
-      <button type="button" onclick="handleSubmit()">Submit Agreement</button>
+      <button type="button" id="submitBtn">Submit Agreement</button>
     </form>
   </div>
 
   <script type="module">
     import emailjs from 'https://cdn.emailjs.com/dist/email.min.mjs';
-
     emailjs.init('IrTm0Re0aqHJDhTxA');
 
-    const carrierInput = document.getElementById("carrierName");
+    window.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById("carrierName");
+      const preview = document.getElementById("signaturePreview");
+      const button = document.getElementById("submitBtn");
 
-    window.updateSignature = function () {
-      const name = carrierInput.value;
-      document.getElementById('signaturePreview').textContent = name;
-    }
+      input.addEventListener("input", () => {
+        preview.textContent = input.value;
+      });
 
-    window.handleSubmit = async function () {
-      const name = carrierInput.value.trim();
-      if (!name) {
-        window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
-        return;
-      }
+      button.addEventListener("click", async () => {
+        const name = input.value.trim();
+        if (!name) {
+          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
+          return;
+        }
 
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text("Freight Dispatch Agreement", 10, 10);
-      doc.text(`Carrier Name: ${name}`, 10, 20);
-      doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("Freight Dispatch Agreement", 10, 10);
+        doc.text(`Carrier Name: ${name}`, 10, 20);
+        doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
 
-      const pdfBlob = doc.output("blob");
-      const reader = new FileReader();
+        const pdfBlob = doc.output("blob");
+        const reader = new FileReader();
 
-      reader.onloadend = function () {
-        const base64data = reader.result.split(',')[1];
-        emailjs.send("service_gc8oime", "template_96zlgv8", {
-          carrier_name: name,
-          attachment: base64data
-        }).then(() => {
-          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
-        }).catch((error) => {
-          console.error("FAILED", error);
-          alert("Submission failed. Try again.");
-        });
-      };
+        reader.onloadend = function () {
+          const base64data = reader.result.split(',')[1];
+          emailjs.send("service_gc8oime", "template_96zlgv8", {
+            carrier_name: name,
+            attachment: base64data
+          }).then(() => {
+            window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
+          }).catch((error) => {
+            console.error("FAILED", error);
+            alert("Submission failed. Try again.");
+          });
+        };
 
-      reader.readAsDataURL(pdfBlob);
-    };
+        reader.readAsDataURL(pdfBlob);
+      });
+    });
   </script>
 </body>
 </html>
