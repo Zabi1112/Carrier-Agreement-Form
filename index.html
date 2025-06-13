@@ -24,11 +24,9 @@
     h1, h2 {
       text-align: center;
     }
-    p {
+    p, pre {
       line-height: 1.6;
-    }
-    ul {
-      padding-left: 20px;
+      white-space: pre-wrap;
     }
     #signaturePreview {
       font-family: 'Pacifico', cursive;
@@ -56,17 +54,98 @@
       background-color: #0d47a1;
     }
   </style>
-  <link rel="icon" href="data:,">
 </head>
 <body>
   <div class="container">
     <h1>Freight Dispatch Agreement</h1>
-    <p>This agreement is between <strong>GET MOVING LOGISTICS</strong> and <strong>TAYLOR GLOBAL ENTERPRISES LLC</strong>.</p>
+    <pre id="agreementText">This Freight Dispatch Agreement, (the "Agreement") is effective on the 10th day of June 2025,
+by and between: GET MOVING LOGISTICS (hereinafter known as "Dispatch" or "Dispatcher")
+NCT LOGISTICS INC(hereinafter known as "Carrier").
+WHEREAS, the Dispatch, desires to enter into an agreement with Carrier for Freight Dispatch.
+WHEREAS, the Carrier, a licensed interstate carrier of property holding authority by the FMCSA,
+with MC # 1430967 agrees to enter into an agreement with the Dispatch herein.
+WHEREAS, the Dispatch and the Carrier agree to the following terms and conditions:
+DOCUMENTATION
+Client must furnish to Get Moving Logistics LLC the documents mentioned below:
+MC Authority Letter
+Certificate of Insurance
+W-9 From
+NOA (Notice of assignment) which is your factoring document. 
+(Already Recieved)
+CARRIER RESPONSIBILITIES
+Carrier shall be responsible in all the necessary documentary and legal compliance with its
+operations as a carrier and assumes to be legally liable for any loss, damage, delay, destruction,
+theft, or any liability of whatever nature arises from the transportation of any freight as contemplated
+and falling under this agreement. Carrier shall perform the transport diligently as arranged by the
+Dispatch and as accepted by the Carrier and shall ensure that all equipment necessary to the
+compliance to state laws are properly complied with. Carrier shall assume taxes, premiums, and
+other benefits under the employ of the Carrier and shall maintain the minimum qualifications of
+insurance as prescribed by the FMCSA.
 
-    <h2>DISPATCH REPRESENTATIVE:</h2>
-    <p><strong>Name:</strong> Sagheer Ahmed<br/>
-    <strong>Company:</strong> GET MOVING LOGISTICS<br/>
-    <strong>Signature:</strong> <span style="font-family: 'Pacifico', cursive;">Sagheer Ahmed</span></p>
+FEE
+The Carrier agrees to pay the Dispatcher 3% of the loads that the Dispatcher has provided as part
+of their service. The payment will be charged to the Carrier on a weekly basis. Also Carrier will 
+provide 3 DAT load boards to Dispatcher.
+RELATIONSHIP & RESPONSIBILITIES
+The relationship between the parties shall be of an independent contractor. Dispatch shall offer
+freight transportation shipments to Carrier to reasonable or acceptable locations as may be required,
+subject to the availability of the Carrier.
+Dispatch shall:
+Find freight that best matches profile for the Client and negotiate pay rates with the
+shipper/broker wherever necessary.
+Credit checks the broker
+Route planning
+Arrange fuel advances wherever possible or if requested
+
+Contact Client with load matches and go over options.
+Fax/text/e-mail to shipper/broker the Client’s MC Authority, W-9, proof of insurance, and order
+insurance certificates, if required, along with any other required supporting documentation upon
+the Client agreeing to take a load.
+Handle the setting of appointments if necessary.
+Provide the driver with all dispatch instructions for pickup, transit and delivery.
+Assist with any problems that arise in the transit of the load when necessary if within our
+capabilities. The Client is responsible for own equipment. We can try to direct Client to a service
+that might be of help.
+Hold on to the dispatch, accessorial information, etc. until the load is completed. Once
+completed -Forward the final load confirmation and mail all documentation to the Client,
+concluding that all services have been performed in full.
+TERMS
+This agreement starts on the date both parties sign it and will be in effect for one year. After that, it
+will renew automatically each year.
+TERMINATION
+Either party can end this agreement by giving a written notice to the other party at least 7 days
+before the termination takes effect.
+BILLS OF LADING
+Each freight must constitute a bill of lading which shall be issued by the broker or shipper.
+DAMAGES
+The Party found to be responsible for any loss, damage, and damages, resulting from negligence or
+delay shall be liable for any unless such fault is not attributable to said Carrier.
+NON-ASSIGNMENT
+The Carrier agrees that all freight tendered by the Dispatch to the Carrier shall not be assigned,
+subcontracted, or be arranged for transport to any 3rd party without the prior written consent of the
+Dispatch.
+GOVERNING LAW AND DISPUTES
+This agreement shall be governed by and constructed in accordance with laws of the State of
+without regard to the conflicts of laws. Any disputes arising from this agreement shall be resolved
+before the courts of the same State.
+COUNTERPARTS
+This agreement may be executed in two or more counterparts each of which shall be deemed an
+original and all of which together shall constitute one and the same agreement.
+NON-MODIFICATION
+Any modifications made to this agreement shall only be considered as agreed by the parties in the
+existence of a written instrument signed by both parties.
+SEPARABILITY
+Should any provision of this Agreement be held invalid by any competent court, the same shall apply
+only to the provision affected while the remaining provisions hereto shall remain valid and
+enforceable.
+
+IN WITNESS WHEREOF, the parties hereto have executed this Agreement as of the date first above
+written.
+
+
+Get Moving Logistics is owned and run by ‘Black Matter LLC’ which is registered in the state of Wyoming
+with the Employer Identification Number (EIN) 30-1327737. All Payments to Get Moving Logistics will be
+made to the Business Account of Black Matter LLC or via the Cash App to the handle $SagheerAhmed</pre>
 
     <h2>CARRIER REPRESENTATIVE:</h2>
     <form id="agreementForm">
@@ -77,50 +156,51 @@
     </form>
   </div>
 
-  <!-- EmailJS SDK v4 (ESM compatible) -->
- <script type="module">
-  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4.3.1/+esm';
+  <script type="module">
+    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4.3.1/+esm';
 
-  window.addEventListener('DOMContentLoaded', () => {
-    emailjs.init('IrTm0Re0aqHJDhTxA'); // Your public key
+    window.addEventListener('DOMContentLoaded', () => {
+      emailjs.init('IrTm0Re0aqHJDhTxA'); // Replace with your actual EmailJS public key
 
-    const input = document.getElementById("carrierName");
-    const preview = document.getElementById("signaturePreview");
-    const button = document.getElementById("submitBtn");
+      const input = document.getElementById("carrierName");
+      const preview = document.getElementById("signaturePreview");
+      const button = document.getElementById("submitBtn");
+      const agreement = document.getElementById("agreementText").innerText;
 
-    input.addEventListener("input", () => {
-      preview.textContent = input.value;
+      input.addEventListener("input", () => {
+        preview.textContent = input.value;
+      });
+
+      button.addEventListener("click", async () => {
+        const name = input.value.trim();
+        if (!name) {
+          alert("Please enter your name to sign the agreement.");
+          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
+          return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(12);
+        doc.text("Freight Dispatch Agreement", 10, 10);
+
+        const signedAgreement = `${agreement}\n\nSigned by: ${name}\nDate: ${new Date().toLocaleString()}`;
+        const lines = doc.splitTextToSize(signedAgreement, 180);
+        doc.text(lines, 10, 20);
+
+        doc.save("Freight_Dispatch_Agreement.pdf");
+
+        emailjs.send("service_gc8oime", "template_96zlgv8", {
+          carrier_name: name,
+          signed_at: new Date().toLocaleString()
+        }).then(() => {
+          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
+        }).catch((error) => {
+          console.error("Email send FAILED", error);
+          alert("Submission failed. Please try again later.");
+        });
+      });
     });
-
-    button.addEventListener("click", async () => {
-  const name = input.value.trim();
-  if (!name) {
-    alert("Please enter your name to sign the agreement.");
-    window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
-    return;
-  }
-
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.text("Freight Dispatch Agreement", 10, 10);
-  doc.text(`Carrier Name: ${name}`, 10, 20);
-  doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
-
-  // ✅ Let user download the PDF
-  doc.save("agreement.pdf");
-
-  // ✅ Send you (admin) a notification — no attachment
-  emailjs.send("service_gc8oime", "template_96zlgv8", {
-    carrier_name: name,
-    signed_at: new Date().toLocaleString()
-  }).then(() => {
-    window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
-  }).catch((error) => {
-    console.error("Email send FAILED", error);
-    alert("Submission failed. Please try again later.");
-  });
-});
-  });
-</script>
+  </script>
 </body>
 </html>
