@@ -5,10 +5,6 @@
   <title>Carrier Agreement</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Pacifico&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script>
-    emailjs.init("IrTm0Re0aqHJDhTxA"); // Replace this with your EmailJS Public Key
-  </script>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -116,15 +112,20 @@
     </form>
   </div>
 
-  <script>
-    function updateSignature() {
-      const name = document.getElementById('carrierName').value;
+  <script type="module">
+    import emailjs from 'https://cdn.emailjs.com/dist/email.min.mjs';
+
+    emailjs.init('IrTm0Re0aqHJDhTxA');
+
+    const carrierInput = document.getElementById("carrierName");
+
+    window.updateSignature = function () {
+      const name = carrierInput.value;
       document.getElementById('signaturePreview').textContent = name;
     }
 
-    async function handleSubmit() {
-      const name = document.getElementById('carrierName').value.trim();
-
+    window.handleSubmit = async function () {
+      const name = carrierInput.value.trim();
       if (!name) {
         window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
         return;
@@ -132,7 +133,6 @@
 
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-
       doc.text("Freight Dispatch Agreement", 10, 10);
       doc.text(`Carrier Name: ${name}`, 10, 20);
       doc.text("Signed Electronically on: " + new Date().toLocaleString(), 10, 30);
@@ -142,20 +142,19 @@
 
       reader.onloadend = function () {
         const base64data = reader.result.split(',')[1];
-
         emailjs.send("service_gc8oime", "template_96zlgv8", {
-          carrier_name: "Test Carrier Name", //name
-         // attachment: base64data
+          carrier_name: name,
+          attachment: base64data
         }).then(() => {
           window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
-        }, (error) => {
-          console.error("FAILED...", error);
+        }).catch((error) => {
+          console.error("FAILED", error);
           alert("Submission failed. Try again.");
         });
       };
 
       reader.readAsDataURL(pdfBlob);
-    }
+    };
   </script>
 </body>
 </html>
