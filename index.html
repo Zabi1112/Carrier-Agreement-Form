@@ -21,12 +21,28 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    h1, h2 {
+    h1, h2, h3 {
       text-align: center;
     }
-    p, pre {
+    p {
       line-height: 1.6;
-      white-space: pre-wrap;
+    }
+    .signature-block {
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 0 20px;
+    }
+    .signature {
+      width: 45%;
+      border-top: 1px solid #000;
+      padding-top: 5px;
+      text-align: center;
+      font-family: 'Pacifico', cursive;
+    }
+    .signature-label {
+      text-align: center;
+      margin-top: 5px;
+      font-weight: bold;
     }
     #signaturePreview {
       font-family: 'Pacifico', cursive;
@@ -34,6 +50,7 @@
       padding: 10px;
       border: 1px dashed #ccc;
       margin-bottom: 20px;
+      text-align: center;
     }
     input[type="text"] {
       width: 100%;
@@ -58,100 +75,80 @@
 <body>
   <div class="container">
     <h1>Freight Dispatch Agreement</h1>
-    <pre id="agreementText">This Freight Dispatch Agreement, (the "Agreement") is effective on the 10th day of June 2025,
-by and between: GET MOVING LOGISTICS (hereinafter known as "Dispatch" or "Dispatcher")
-NCT LOGISTICS INC(hereinafter known as "Carrier").
-WHEREAS, the Dispatch, desires to enter into an agreement with Carrier for Freight Dispatch.
-WHEREAS, the Carrier, a licensed interstate carrier of property holding authority by the FMCSA,
-with MC # 1430967 agrees to enter into an agreement with the Dispatch herein.
-WHEREAS, the Dispatch and the Carrier agree to the following terms and conditions:
-DOCUMENTATION
-Client must furnish to Get Moving Logistics LLC the documents mentioned below:
-MC Authority Letter
-Certificate of Insurance
-W-9 From
-NOA (Notice of assignment) which is your factoring document. 
-(Already Recieved)
-CARRIER RESPONSIBILITIES
-Carrier shall be responsible in all the necessary documentary and legal compliance with its
-operations as a carrier and assumes to be legally liable for any loss, damage, delay, destruction,
-theft, or any liability of whatever nature arises from the transportation of any freight as contemplated
-and falling under this agreement. Carrier shall perform the transport diligently as arranged by the
-Dispatch and as accepted by the Carrier and shall ensure that all equipment necessary to the
-compliance to state laws are properly complied with. Carrier shall assume taxes, premiums, and
-other benefits under the employ of the Carrier and shall maintain the minimum qualifications of
-insurance as prescribed by the FMCSA.
 
-FEE
-The Carrier agrees to pay the Dispatcher 3% of the loads that the Dispatcher has provided as part
-of their service. The payment will be charged to the Carrier on a weekly basis. Also Carrier will 
-provide 3 DAT load boards to Dispatcher.
-RELATIONSHIP & RESPONSIBILITIES
-The relationship between the parties shall be of an independent contractor. Dispatch shall offer
-freight transportation shipments to Carrier to reasonable or acceptable locations as may be required,
-subject to the availability of the Carrier.
-Dispatch shall:
-Find freight that best matches profile for the Client and negotiate pay rates with the
-shipper/broker wherever necessary.
-Credit checks the broker
-Route planning
-Arrange fuel advances wherever possible or if requested
+    <p><strong>Effective Date:</strong> 26th September 2023</p>
+    <p><strong>Between:</strong> GET MOVING LOGISTICS ("Dispatch") and ROBINSON SMITH TRUCKING LLC ("Carrier")</p>
 
-Contact Client with load matches and go over options.
-Fax/text/e-mail to shipper/broker the Client’s MC Authority, W-9, proof of insurance, and order
-insurance certificates, if required, along with any other required supporting documentation upon
-the Client agreeing to take a load.
-Handle the setting of appointments if necessary.
-Provide the driver with all dispatch instructions for pickup, transit and delivery.
-Assist with any problems that arise in the transit of the load when necessary if within our
-capabilities. The Client is responsible for own equipment. We can try to direct Client to a service
-that might be of help.
-Hold on to the dispatch, accessorial information, etc. until the load is completed. Once
-completed -Forward the final load confirmation and mail all documentation to the Client,
-concluding that all services have been performed in full.
-TERMS
-This agreement starts on the date both parties sign it and will be in effect for one year. After that, it
-will renew automatically each year.
-TERMINATION
-Either party can end this agreement by giving a written notice to the other party at least 7 days
-before the termination takes effect.
-BILLS OF LADING
-Each freight must constitute a bill of lading which shall be issued by the broker or shipper.
-DAMAGES
-The Party found to be responsible for any loss, damage, and damages, resulting from negligence or
-delay shall be liable for any unless such fault is not attributable to said Carrier.
-NON-ASSIGNMENT
-The Carrier agrees that all freight tendered by the Dispatch to the Carrier shall not be assigned,
-subcontracted, or be arranged for transport to any 3rd party without the prior written consent of the
-Dispatch.
-GOVERNING LAW AND DISPUTES
-This agreement shall be governed by and constructed in accordance with laws of the State of
-without regard to the conflicts of laws. Any disputes arising from this agreement shall be resolved
-before the courts of the same State.
-COUNTERPARTS
-This agreement may be executed in two or more counterparts each of which shall be deemed an
-original and all of which together shall constitute one and the same agreement.
-NON-MODIFICATION
-Any modifications made to this agreement shall only be considered as agreed by the parties in the
-existence of a written instrument signed by both parties.
-SEPARABILITY
-Should any provision of this Agreement be held invalid by any competent court, the same shall apply
-only to the provision affected while the remaining provisions hereto shall remain valid and
-enforceable.
+    <h3>Documentation</h3>
+    <p>Client must furnish to Get Moving Logistics LLC the following documents:</p>
+    <ul>
+      <li>MC Authority Letter</li>
+      <li>Certificate of Insurance</li>
+      <li>W-9 Form</li>
+      <li>NOA (Notice of Assignment) – factoring document</li>
+    </ul>
 
-IN WITNESS WHEREOF, the parties hereto have executed this Agreement as of the date first above
-written.
+    <h3>Carrier Responsibilities</h3>
+    <p>The Carrier shall ensure all legal and compliance duties are fulfilled, and shall be liable for loss, damage, delay, or theft. The Carrier is responsible for taxes, benefits, and maintaining FMCSA insurance compliance.</p>
 
+    <h3>Fee</h3>
+    <p>The Carrier agrees to pay the Dispatcher $220 weekly for dispatched loads.</p>
 
-Get Moving Logistics is owned and run by ‘Black Matter LLC’ which is registered in the state of Wyoming
-with the Employer Identification Number (EIN) 30-1327737. All Payments to Get Moving Logistics will be
-made to the Business Account of Black Matter LLC or via the Cash App to the handle $SagheerAhmed</pre>
+    <h3>Relationship & Responsibilities</h3>
+    <p>This is an independent contractor relationship. Dispatch will:</p>
+    <ul>
+      <li>Find suitable freight</li>
+      <li>Negotiate with brokers</li>
+      <li>Perform credit checks</li>
+      <li>Plan routes</li>
+      <li>Arrange fuel advances if requested</li>
+      <li>Handle documentation and appointment setup</li>
+      <li>Support during transit issues if possible</li>
+    </ul>
+
+    <h3>Terms</h3>
+    <p>The agreement is valid for one year and auto-renews unless terminated with 7-day written notice.</p>
+
+    <h3>Bills of Lading</h3>
+    <p>Each freight must have a bill of lading issued by the broker or shipper.</p>
+
+    <h3>Damages</h3>
+    <p>Any party at fault for damages or delays is liable unless exempted.</p>
+
+    <h3>Non-Assignment</h3>
+    <p>The Carrier may not subcontract or reassign loads without written permission.</p>
+
+    <h3>Governing Law</h3>
+    <p>This Agreement is governed by the laws of the applicable State.</p>
+
+    <h3>Modifications & Severability</h3>
+    <p>Changes require written agreement. Invalid clauses will not affect the rest of the contract.</p>
+
+    <h3>Signatures</h3>
+    <div class="signature-block">
+      <div>
+        <div class="signature">Sagheer Ahmed</div>
+        <div class="signature-label">Dispatcher Name</div>
+      </div>
+      <div>
+        <div id="signaturePreview">&nbsp;</div>
+        <div class="signature-label">Carrier Signature</div>
+      </div>
+    </div>
+
+    <p><strong>Carrier Name:</strong> <span id="carrierNameDisplay"></span></p>
+
+    <h3>Important Disclaimer</h3>
+    <p>
+      Get Moving Logistics is owned and run by ‘Black Matter LLC’ which is registered in the state of Wyoming<br>
+      with the Employer Identification Number (EIN) 30-1327737. All Payments to Get Moving Logistics will be
+      made to the Business Account of Black Matter LLC or via the Cash App to the handle <strong>$SagheerAhmed</strong>.
+    </p>
 
     <h2>CARRIER REPRESENTATIVE:</h2>
     <form id="agreementForm">
       <label for="carrierName">Your Full Name (as Signature):</label>
       <input type="text" id="carrierName" name="carrier_name" placeholder="Type your full name" required>
-      <div id="signaturePreview"></div>
       <button type="button" id="submitBtn">Submit Agreement</button>
     </form>
   </div>
@@ -160,15 +157,17 @@ made to the Business Account of Black Matter LLC or via the Cash App to the hand
     import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4.3.1/+esm';
 
     window.addEventListener('DOMContentLoaded', () => {
-      emailjs.init('IrTm0Re0aqHJDhTxA'); // Replace with your actual EmailJS public key
+      emailjs.init('IrTm0Re0aqHJDhTxA');
 
       const input = document.getElementById("carrierName");
       const preview = document.getElementById("signaturePreview");
+      const nameDisplay = document.getElementById("carrierNameDisplay");
       const button = document.getElementById("submitBtn");
-      const agreement = document.getElementById("agreementText").innerText;
+      const container = document.querySelector(".container");
 
       input.addEventListener("input", () => {
         preview.textContent = input.value;
+        nameDisplay.textContent = input.value;
       });
 
       button.addEventListener("click", async () => {
@@ -182,12 +181,10 @@ made to the Business Account of Black Matter LLC or via the Cash App to the hand
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         doc.setFontSize(12);
-        doc.text("Freight Dispatch Agreement", 10, 10);
 
-        const signedAgreement = `${agreement}\n\nSigned by: ${name}\nDate: ${new Date().toLocaleString()}`;
-        const lines = doc.splitTextToSize(signedAgreement, 180);
-        doc.text(lines, 10, 20);
-
+        const content = container.innerText + `\n\nSigned by: ${name}\nDispatcher: Sagheer Ahmed`;
+        const lines = doc.splitTextToSize(content, 180);
+        doc.text(lines, 10, 10);
         doc.save("Freight_Dispatch_Agreement.pdf");
 
         emailjs.send("service_gc8oime", "template_96zlgv8", {
