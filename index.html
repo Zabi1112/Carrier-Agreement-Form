@@ -124,19 +124,19 @@
     <h3>Modifications & Severability</h3>
     <p>Changes require written agreement. Invalid clauses will not affect the rest of the contract.</p>
 
-    <h3>Signatures</h3>
+     <h3>Signatures</h3>
     <div class="signature-block">
-      <div>
+      <div class="signature-column">
+        <div class="signature-name">Dispatcher Name: Sagheer Ahmed</div>
         <div class="signature">Sagheer Ahmed</div>
-        <div class="signature-label">Dispatcher Name</div>
+        <div class="signature-label">Dispatch Signature</div>
       </div>
-      <div>
+      <div class="signature-column">
+        <div class="signature-name">Carrier Name: <span id="carrierNameDisplay"></span></div>
         <div id="signaturePreview">&nbsp;</div>
         <div class="signature-label">Carrier Signature</div>
       </div>
     </div>
-
-    <p><strong>Carrier Name:</strong> <span id="carrierNameDisplay"></span></p>
 
     <h3>Important Disclaimer</h3>
     <p>
@@ -179,12 +179,21 @@
         }
 
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.setFontSize(12);
+        const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+        doc.setFontSize(10);
 
-        const content = container.innerText + `\n\nSigned by: ${name}\nDispatcher: Sagheer Ahmed`;
-        const lines = doc.splitTextToSize(content, 180);
-        doc.text(lines, 10, 10);
+        const content = container.innerText + `\n\nDispatcher Name: Sagheer Ahmed\nDispatcher Signature: Sagheer Ahmed\nCarrier Name: ${name}\nCarrier Signature: ${name}`;
+        const lines = doc.splitTextToSize(content, 520);
+        let y = 40;
+        lines.forEach(line => {
+          if (y > 780) {
+            doc.addPage();
+            y = 40;
+          }
+          doc.text(line, 40, y);
+          y += 14;
+        });
+
         doc.save("Freight_Dispatch_Agreement.pdf");
 
         emailjs.send("service_gc8oime", "template_96zlgv8", {
