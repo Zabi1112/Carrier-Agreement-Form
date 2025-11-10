@@ -35,21 +35,49 @@
         <li>Certificate of Insurance</li>
         <li>W-9 Form</li>
         <li>NOA (Notice of Assignment) – factoring document</li>
+        <li>(Already Delivered)</li>
       </ul>
 
       <h3>Carrier Responsibilities</h3>
       <p>The Carrier shall ensure all legal and compliance duties are fulfilled, and shall be liable for loss, damage, delay, or theft. The Carrier is responsible for taxes, benefits, and maintaining FMCSA insurance compliance.</p>
 
       <h3>Fee</h3>
-      <p>The Carrier agrees to pay the Dispatcher <strong><span id="ratePercentDisplay"></span>%</strong> weekly for dispatched loads. Also provides <strong><span id="seatsDisplay"></span></strong> DAT load board seats to the Dispatcher.</p>
+      <p>The Carrier agrees to pay the Dispatcher <strong><span id="ratePercentDisplay"></span>%</strong> weekly for dispatched loads. Also provides <strong><span id="seatsDisplay"></span></strong> DAT Load Board seats to the Dispatchers.</p>
+
+      <h3>Relationship & Responsibilities</h3>
+      <p>This is an independent contractor relationship. Dispatch will:</p>
+      <ul>
+        <li>Find suitable freight</li>
+        <li>Negotiate with brokers</li>
+        <li>Perform credit checks</li>
+        <li>Plan routes</li>
+        <li>Arrange fuel advances if requested</li>
+        <li>Handle documentation and appointment setup</li>
+        <li>Support during transit issues if possible</li>
+      </ul>
 
       <h3>Terms</h3>
       <p>The agreement is valid for one year and auto-renews unless terminated with 7-day written notice.</p>
 
+      <h3>Bills of Lading</h3>
+      <p>Each freight must have a bill of lading issued by the broker or shipper.</p>
+
+      <h3>Damages</h3>
+      <p>Any party at fault for damages or delays is liable unless exempted.</p>
+
+      <h3>Non-Assignment</h3>
+      <p>The Carrier may not subcontract or reassign loads without written permission.</p>
+
+      <h3>Governing Law</h3>
+      <p>This Agreement is governed by the laws of the applicable State.</p>
+
+      <h3>Modifications & Severability</h3>
+      <p>Changes require written agreement. Invalid clauses will not affect the rest of the contract.</p>
+
       <h3>Signatures</h3>
       <div class="signature-block" style="display:flex;justify-content:space-between;margin:24px 0">
         <div style="width:45%;text-align:center">
-          <div class="signature">Sagheer Ahmed</div>
+          <div class="signature">Usama Khan</div>
           <div class="signature-label">Dispatch Signature</div>
         </div>
         <div style="width:45%;text-align:center">
@@ -57,6 +85,13 @@
           <div class="signature-label">Carrier Signature</div>
         </div>
       </div>
+
+      <h3>Important Disclaimer</h3>
+      <p>
+        Get Moving Logistics is owned and run by ‘Black Matter LLC’ which is registered in the state of Wyoming<br>
+        with the Employer Identification Number (EIN) 30-1327737. All Payments to Get Moving Logistics will be
+        made to the Business Account of Black Matter LLC or via the Cash App to the handle <strong>$UsamaKhan</strong>.
+      </p>
 
       <form id="agreementForm">
         <label for="carrierName">Your Full Name (as Signature):</label>
@@ -74,47 +109,30 @@
   </div>
 
 <script type="module">
-  const STORAGE_KEY = 'gm_agreements_v1';
+  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4.3.1/+esm';
+  emailjs.init('IrTm0Re0aqHJDhTxA'); // your EmailJS public key
 
+  const STORAGE_KEY = 'gm_agreements_v1';
   function loadAgreements(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){ return {}; } }
   function saveAgreements(obj){ localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }
+  function getParam(name){ return new URLSearchParams(window.location.search).get(name); }
 
-  function getParam(name){
-    const params = new URLSearchParams(window.location.search);
-    return params.get(name);
-  }
+  function showError(msg){ const e=document.getElementById('errorBox'); e.style.display='block'; e.textContent=msg; }
+  function showStatus(msg){ const s=document.getElementById('statusBox'); s.style.display='block'; s.textContent=msg; }
 
-  function showError(msg){ const e = document.getElementById('errorBox'); e.style.display='block'; e.textContent = msg; }
-  function showStatus(msg){ const s = document.getElementById('statusBox'); s.style.display='block'; s.textContent = msg; }
-
-  // When page loads:
   (function init(){
     const token = getParam('token');
-    if(!token){
-      document.getElementById('agreementContent').style.display='none';
-      document.getElementById('noToken').style.display='block';
-      return;
-    }
+    if(!token){ document.getElementById('noToken').style.display='block'; return; }
+
     const agreements = loadAgreements();
     const ag = agreements[token];
-    if(!ag){
-      showError('This agreement link is invalid or not found. It may have been generated from another admin device. Contact dispatcher.');
-      return;
-    }
+    if(!ag){ showError('Invalid or missing agreement link. Contact the dispatcher.'); return; }
 
     const now = Date.now();
-    if(ag.expiresAt < now){
-      showError('This agreement link has expired.');
-      return;
-    }
-    if(ag.used && ag.usedCount >= (ag.maxUses || 1)){
-      showError('This agreement link has already been used.');
-      return;
-    }
+    if(ag.expiresAt < now){ showError('This agreement link has expired.'); return; }
+    if(ag.used && ag.usedCount >= (ag.maxUses || 1)){ showError('This agreement link has already been signed.'); return; }
 
-    // All good — populate UI
-    document.getElementById('agreementContent').style.display = 'block';
-    document.getElementById('noToken').style.display = 'none';
+    document.getElementById('agreementContent').style.display='block';
     document.getElementById('companyNameDisplay').textContent = ag.companyName || '(Carrier)';
     document.getElementById('companyMCDisplay').textContent = ag.companyMC || '-';
     document.getElementById('ratePercentDisplay').textContent = ag.ratePercent || '-';
@@ -125,77 +143,52 @@
     const preview = document.getElementById("signaturePreview");
     input.addEventListener("input", () => preview.textContent = input.value);
 
-    // submit:
     document.getElementById('submitBtn').addEventListener('click', async () => {
       const name = input.value.trim();
       if(!name){ alert('Please enter your name to sign.'); return; }
 
-      // mark token used
       const agreementsNow = loadAgreements();
-      if(!agreementsNow[token]) { showError('Agreement not found'); return; }
       agreementsNow[token].usedCount = (agreementsNow[token].usedCount || 0) + 1;
-      if(agreementsNow[token].usedCount >= (agreementsNow[token].maxUses || 1)) {
+      if(agreementsNow[token].usedCount >= (agreementsNow[token].maxUses || 1)){
         agreementsNow[token].used = true;
       }
       saveAgreements(agreementsNow);
 
-      // generate PDF (same approach you had)
       try {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ unit: 'pt', format: 'a4' });
         doc.setFontSize(10);
-
         let textContent = "";
-        document.querySelectorAll('.container p, .container ul, .container h3').forEach((el) => {
-          textContent += el.innerText + "\\n\\n";
-        });
-
+        document.querySelectorAll('.container p, .container ul, .container h3').forEach(el => textContent += el.innerText + "\n\n");
         const lines = doc.splitTextToSize(textContent, 520);
         let y = 40;
-        lines.forEach(line => {
-          if (y > 780) { doc.addPage(); y = 40; }
-          doc.text(line, 40, y);
-          y += 14;
-        });
-
+        lines.forEach(line => { if (y > 780) { doc.addPage(); y = 40; } doc.text(line, 40, y); y += 14; });
         y += 30;
-        doc.setFont("helvetica", "bold");
-        doc.text("Dispatcher Name: Sagheer Ahmed", 40, y);
+        doc.setFont("helvetica","bold");
+        doc.text("Dispatcher Name: Usama Khan", 40, y);
         y += 20;
         doc.setFont("Pacifico");
-        doc.text("Sagheer Ahmed", 40, y);
-
-        doc.setFont("helvetica", "bold");
-        doc.text(`Carrier Name: ${name}`, 350, y - 20);
+        doc.text("Usama Khan", 40, y);
+        doc.setFont("helvetica","bold");
+        doc.text(`Carrier Name: ${name}`, 350, y-20);
         y += 20;
         doc.setFont("Pacifico");
-        doc.text(`${name}`, 350, y);
-
+        doc.text(name, 350, y);
         doc.save("Freight_Dispatch_Agreement.pdf");
-      } catch(e){
-        console.warn('PDF generation failed', e);
-      }
+      } catch(e){ console.warn('PDF generation failed', e); }
 
-      // optionally send email via emailjs (if configured). We'll try if emailjs is present.
       try {
-        if(window.emailjs){
-          emailjs.send("service_gc8oime", "template_96zlgv8", {
-            carrier_name: name,
-            signed_at: new Date().toLocaleString()
-          }).catch(()=>{ /* ignore email failures */ });
-        }
+        emailjs.send("service_gc8oime", "template_96zlgv8", {
+          carrier_name: name,
+          signed_at: new Date().toLocaleString()
+        });
       } catch(e){ console.warn(e); }
 
-      // redirect to success page
       window.location.href = 'success.html';
     });
 
-    // reject button
-    document.getElementById('rejectBtn').addEventListener('click', () => {
-      window.location.href = 'rejected.html';
-    });
-
-    showStatus('This link is valid. Please sign below to complete the agreement.');
+    document.getElementById('rejectBtn').addEventListener('click', () => window.location.href='rejected.html');
+    showStatus('This link is valid. Please review and sign the agreement below.');
   })();
 </script>
 </body>
