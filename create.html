@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Create Agreement Link - Get Moving Logistics</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:Roboto,Arial; background:#f5f7fb; color:#111; padding:28px;}
+    .card{max-width:760px;margin:20px auto;padding:24px;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    input, select {width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:6px}
+    label{font-weight:600;margin-top:10px;display:block}
+    button{background:#1976d2;color:#fff;padding:10px 14px;border:none;border-radius:8px;cursor:pointer}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    small{color:#666}
+    .output{background:#f1f8ff;padding:12px;border-radius:8px;margin-top:12px;word-break:break-all}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Create Single-Use Agreement Link</h2>
+    <p>Fill the details below, set expiry, then generate a link to share with your client. The link is single-use and will be invalid after signing or expiry.</p>
+
+    <label>Company Name</label>
+    <input id="companyName" placeholder="Carrier Company Name">
+
+    <div class="row">
+      <div class="col">
+        <label>Company MC#</label>
+        <input id="companyMC" placeholder="e.g. 1122681">
+      </div>
+      <div class="col">
+        <label>Rate % (dispatch fee)</label>
+        <input id="ratePercent" placeholder="e.g. 4">
+      </div>
+    </div>
+
+    <label>Load Board Seats</label>
+    <input id="seats" placeholder="e.g. 2">
+
+    <div class="row">
+      <div class="col">
+        <label>Expiry in hours</label>
+        <input id="expiryHours" type="number" value="72" min="1">
+      </div>
+      <div class="col">
+        <label>Optional: Max uses (default 1)</label>
+        <input id="maxUses" type="number" value="1" min="1">
+      </div>
+    </div>
+
+    <button id="generateBtn">Generate Link</button>
+
+    <div id="result" style="display:none" class="output"></div>
+
+    <h4 style="margin-top:18px">Existing Active Links (localStorage)</h4>
+    <div id="activeList"></div>
+
+    <p style="margin-top:14px"><small>Note: This demo uses browser storage. If you clear browser storage or change device, tokens will not be available. For multi-admin or production use, see suggestions below.</small></p>
+  </div>
+
+<script>
+  // key used in localStorage to persist agreements
+  const STORAGE_KEY = 'gm_agreements_v1';
+
+  function loadAgreements(){
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch(e) { return {}; }
+  }
+  function saveAgreements(obj){ localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }
+
+  function renderActive(){
+    const container = document.getElementById('activeList');
+    const agreements = loadAgreements();
+    const now = Date.now();
+    const rows = Object.entries(agreements).map(([token, ag]) => {
+      const expiresAt = new Date(ag.expiresAt).toLocaleString();
+      return `<div style="padding:8px;border-bottom:1px solid #eee">
+        <strong>${ag.companyName || '(no name)'}</strong> — MC: ${ag.companyMC || '-'} — Rate: ${ag.ratePercent || '-'}% — Seats: ${ag.seats || '-'}
+        <div style="font-size:12px;color:#666;margin-top:6px">Token: ${token} — Expires: ${expiresAt} — Uses: ${ag.usedCount || 0}/${ag.maxUses || 1} — ${ag.used ? '<span style="color:#c62828">USED</span>' : (ag.expiresAt < now ? '<span style="color:#999">EXPIRED</span>' : '<span style="color:#2e7d32">ACTIVE</span>')}</div>
+      </div>`;
+    });
+    container.innerHTML = rows.length ? rows.join('') : '<small>No active links</small>';
+  }
+
+  function uuidv4(){
+    // Use crypto if available
+    if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'tk-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2,9);
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', () => {
+    const companyName = document.getElementById('companyName').value.trim();
+    const companyMC = document.getElementById('companyMC').value.trim();
+    const ratePercent = document.getElementById('ratePercent').value.trim();
+    const seats = document.getElementById('seats').value.trim();
+    const hours = parseFloat(document.getElementById('expiryHours').value) || 72;
+    const maxUses = parseInt(document.getElementById('maxUses').value) || 1;
+
+    const token = uuidv4();
+    const now = Date.now();
+    const expiresAt = now + (hours * 3600 * 1000);
+
+    const agreements = loadAgreements();
+    agreements[token] = {
+      companyName, companyMC, ratePercent, seats,
+      createdAt: now, expiresAt, maxUses, used: false, usedCount: 0
+    };
+    saveAgreements(agreements);
+
+    const origin = location.origin + location.pathname.replace(/\/[^/]*$/, '/'); // base path
+    // create link pointing to index.html in same folder
+    const link = `${location.origin}${location.pathname.replace(/\/[^/]*$/, '/') }index.html?token=${encodeURIComponent(token)}`;
+
+    const result = document.getElementById('result');
+    result.style.display = 'block';
+    result.innerHTML = `<div>Shareable link:</div><div style="margin-top:8px"><a href="${link}" target="_blank">${link}</a></div>
+                        <div style="margin-top:8px"><button id="copyLink">Copy Link</button></div>
+                        <div style="margin-top:8px;color:#555"><small>Expires at: ${new Date(expiresAt).toLocaleString()}</small></div>`;
+    document.getElementById('copyLink').addEventListener('click', () => {
+      navigator.clipboard?.writeText(link).then(()=>alert('Link copied to clipboard'));
+    });
+
+    renderActive();
+  });
+
+  // initial render
+  renderActive();
+</script>
+</body>
+</html>

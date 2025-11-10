@@ -6,200 +6,158 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Pacifico&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 30px;
-      color: #333;
-    }
-    .container {
-      background: #fff;
-      max-width: 900px;
-      margin: auto;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    h1, h2, h3 {
-      text-align: center;
-    }
-    p {
-      line-height: 1.6;
-    }
-    .signature-block {
-      display: flex;
-      justify-content: space-between;
-      margin: 40px 0 20px;
-    }
-    .signature {
-      width: 45%;
-      border-top: 1px solid #000;
-      padding-top: 5px;
-      text-align: center;
-      font-family: 'Pacifico', cursive;
-    }
-    .signature-label {
-      text-align: center;
-      margin-top: 5px;
-      font-weight: bold;
-    }
-    #signaturePreview {
-      font-family: 'Pacifico', cursive;
-      font-size: 24px;
-      padding: 10px;
-      border: 1px dashed #ccc;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      font-size: 16px;
-    }
-    button {
-      padding: 12px 20px;
-      background-color: #1976d2;
-      color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0d47a1;
-    }
+    body { font-family: 'Roboto', sans-serif; background: #f5f5f5; margin: 0; padding: 30px; color: #333; }
+    .container { background: #fff; max-width: 900px; margin: auto; padding: 40px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,.08); }
+    h1,h2,h3{ text-align:center }
+    input[type="text"] { width:100%; padding:10px; margin-top:5px; font-size:16px; }
+    button{ padding:12px 20px; background-color:#1976d2; color:white; border:none; border-radius:5px; cursor:pointer}
+    button[disabled]{ background:#bbb; cursor:not-allowed }
+    .signature { font-family:'Pacifico', cursive; font-size:24px; padding:10px; border:1px dashed #ccc; text-align:center; margin-bottom:20px }
+    .info { background:#eef6ff; padding:10px; border-radius:8px; margin-bottom:12px; color:#0d47a1 }
+    .error { background:#ffebee; padding:10px; border-radius:8px; color:#b71c1c; margin-bottom:12px }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="mainCard">
     <h1>Freight Dispatch Agreement</h1>
 
-    <p><strong>Effective Date:</strong> 21st August 2025</p>
-    <p><strong>Between:</strong> GET MOVING LOGISTICS ("Dispatch") and 	STARKS LOGISTICS LLC ("Carrier") MC# 1122681</p>
+    <div id="statusBox" class="info" style="display:none"></div>
+    <div id="errorBox" class="error" style="display:none"></div>
 
-    <h3>Documentation</h3>
-    <p>Client must furnish to Get Moving Logistics LLC the following documents:</p>
-    <ul>
-      <li>MC Authority Letter</li>
-      <li>Certificate of Insurance</li>
-      <li>W-9 Form</li>
-      <li>NOA (Notice of Assignment) – factoring document</li>
-      <li>(Already Delivered)</li>
-    </ul>
+    <div id="agreementContent" style="display:none">
+      <p><strong>Effective Date:</strong> <span id="effectiveDate"></span></p>
+      <p><strong>Between:</strong> GET MOVING LOGISTICS ("Dispatch") and <span id="companyNameDisplay"></span> ("Carrier") MC# <span id="companyMCDisplay"></span></p>
 
-    <h3>Carrier Responsibilities</h3>
-    <p>The Carrier shall ensure all legal and compliance duties are fulfilled, and shall be liable for loss, damage, delay, or theft. The Carrier is responsible for taxes, benefits, and maintaining FMCSA insurance compliance.</p>
+      <h3>Documentation</h3>
+      <p>Client must furnish to Get Moving Logistics LLC the following documents:</p>
+      <ul>
+        <li>MC Authority Letter</li>
+        <li>Certificate of Insurance</li>
+        <li>W-9 Form</li>
+        <li>NOA (Notice of Assignment) – factoring document</li>
+      </ul>
 
-    <h3>Fee</h3>
-    <p>The Carrier agrees to pay the Dispatcher 4% weekly for dispatched loads. Also Provides 2 DAT Load Board To the Dsipatchers</p>
+      <h3>Carrier Responsibilities</h3>
+      <p>The Carrier shall ensure all legal and compliance duties are fulfilled, and shall be liable for loss, damage, delay, or theft. The Carrier is responsible for taxes, benefits, and maintaining FMCSA insurance compliance.</p>
 
-    <h3>Relationship & Responsibilities</h3>
-    <p>This is an independent contractor relationship. Dispatch will:</p>
-    <ul>
-      <li>Find suitable freight</li>
-      <li>Negotiate with brokers</li>
-      <li>Perform credit checks</li>
-      <li>Plan routes</li>
-      <li>Arrange fuel advances if requested</li>
-      <li>Handle documentation and appointment setup</li>
-      <li>Support during transit issues if possible</li>
-    </ul>
+      <h3>Fee</h3>
+      <p>The Carrier agrees to pay the Dispatcher <strong><span id="ratePercentDisplay"></span>%</strong> weekly for dispatched loads. Also provides <strong><span id="seatsDisplay"></span></strong> DAT load board seats to the Dispatcher.</p>
 
-    <h3>Terms</h3>
-    <p>The agreement is valid for one year and auto-renews unless terminated with 7-day written notice.</p>
+      <h3>Terms</h3>
+      <p>The agreement is valid for one year and auto-renews unless terminated with 7-day written notice.</p>
 
-    <h3>Bills of Lading</h3>
-    <p>Each freight must have a bill of lading issued by the broker or shipper.</p>
-
-    <h3>Damages</h3>
-    <p>Any party at fault for damages or delays is liable unless exempted.</p>
-
-    <h3>Non-Assignment</h3>
-    <p>The Carrier may not subcontract or reassign loads without written permission.</p>
-
-    <h3>Governing Law</h3>
-    <p>This Agreement is governed by the laws of the applicable State.</p>
-
-    <h3>Modifications & Severability</h3>
-    <p>Changes require written agreement. Invalid clauses will not affect the rest of the contract.</p>
-
-     <h3>Signatures</h3>
-    <div class="signature-block">
-      <div class="signature-column">
-        <div class="signature-name">Dispatcher Name: Sagheer Ahmed</div>
-        <div class="signature">Sagheer Ahmed</div>
-        <div class="signature-label">Dispatch Signature</div>
+      <h3>Signatures</h3>
+      <div class="signature-block" style="display:flex;justify-content:space-between;margin:24px 0">
+        <div style="width:45%;text-align:center">
+          <div class="signature">Sagheer Ahmed</div>
+          <div class="signature-label">Dispatch Signature</div>
+        </div>
+        <div style="width:45%;text-align:center">
+          <div class="signature" id="signaturePreview">&nbsp;</div>
+          <div class="signature-label">Carrier Signature</div>
+        </div>
       </div>
-      <div class="signature-column">
-        <div class="signature-name">Carrier Name: <span id="carrierNameDisplay"></span></div>
-        <div id="signaturePreview">&nbsp;</div>
-        <div class="signature-label">Carrier Signature</div>
-      </div>
+
+      <form id="agreementForm">
+        <label for="carrierName">Your Full Name (as Signature):</label>
+        <input type="text" id="carrierName" name="carrier_name" placeholder="Type your full name" required>
+        <div style="margin-top:12px;display:flex;gap:12px">
+          <button type="button" id="submitBtn">Submit Agreement</button>
+          <button type="button" id="rejectBtn" style="background:#c62828">Reject</button>
+        </div>
+      </form>
     </div>
 
-    <h3>Important Disclaimer</h3>
-    <p>
-      Get Moving Logistics is owned and run by ‘Black Matter LLC’ which is registered in the state of Wyoming<br>
-      with the Employer Identification Number (EIN) 30-1327737. All Payments to Get Moving Logistics will be
-      made to the Business Account of Black Matter LLC or via the Cash App to the handle <strong>$SagheerAhmed</strong>.
-    </p>
-
-    <form id="agreementForm">
-      <label for="carrierName">Your Full Name (as Signature):</label>
-      <input type="text" id="carrierName" name="carrier_name" placeholder="Type your full name" required>
-      <button type="button" id="submitBtn">Submit Agreement</button>
-    </form>
+    <div id="noToken" style="display:none">
+      <p>No token provided. Ask the dispatcher to generate a valid link (use <a href="create.html">create.html</a>).</p>
+    </div>
   </div>
 
-  <script type="module">
-    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4.3.1/+esm';
+<script type="module">
+  const STORAGE_KEY = 'gm_agreements_v1';
 
-    window.addEventListener('DOMContentLoaded', () => {
-      emailjs.init('IrTm0Re0aqHJDhTxA');
+  function loadAgreements(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){ return {}; } }
+  function saveAgreements(obj){ localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }
 
-      const input = document.getElementById("carrierName");
-      const preview = document.getElementById("signaturePreview");
-      const nameDisplay = document.getElementById("carrierNameDisplay");
-      const button = document.getElementById("submitBtn");
-      const container = document.querySelector(".container");
+  function getParam(name){
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
 
-      input.addEventListener("input", () => {
-        preview.textContent = input.value;
-        nameDisplay.textContent = input.value;
-      });
+  function showError(msg){ const e = document.getElementById('errorBox'); e.style.display='block'; e.textContent = msg; }
+  function showStatus(msg){ const s = document.getElementById('statusBox'); s.style.display='block'; s.textContent = msg; }
 
-      button.addEventListener("click", async () => {
-        const name = input.value.trim();
-        if (!name) {
-          alert("Please enter your name to sign the agreement.");
-          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/rejected.html";
-          return;
-        }
+  // When page loads:
+  (function init(){
+    const token = getParam('token');
+    if(!token){
+      document.getElementById('agreementContent').style.display='none';
+      document.getElementById('noToken').style.display='block';
+      return;
+    }
+    const agreements = loadAgreements();
+    const ag = agreements[token];
+    if(!ag){
+      showError('This agreement link is invalid or not found. It may have been generated from another admin device. Contact dispatcher.');
+      return;
+    }
 
+    const now = Date.now();
+    if(ag.expiresAt < now){
+      showError('This agreement link has expired.');
+      return;
+    }
+    if(ag.used && ag.usedCount >= (ag.maxUses || 1)){
+      showError('This agreement link has already been used.');
+      return;
+    }
+
+    // All good — populate UI
+    document.getElementById('agreementContent').style.display = 'block';
+    document.getElementById('noToken').style.display = 'none';
+    document.getElementById('companyNameDisplay').textContent = ag.companyName || '(Carrier)';
+    document.getElementById('companyMCDisplay').textContent = ag.companyMC || '-';
+    document.getElementById('ratePercentDisplay').textContent = ag.ratePercent || '-';
+    document.getElementById('seatsDisplay').textContent = ag.seats || '-';
+    document.getElementById('effectiveDate').textContent = new Date(ag.createdAt).toLocaleDateString();
+
+    const input = document.getElementById("carrierName");
+    const preview = document.getElementById("signaturePreview");
+    input.addEventListener("input", () => preview.textContent = input.value);
+
+    // submit:
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const name = input.value.trim();
+      if(!name){ alert('Please enter your name to sign.'); return; }
+
+      // mark token used
+      const agreementsNow = loadAgreements();
+      if(!agreementsNow[token]) { showError('Agreement not found'); return; }
+      agreementsNow[token].usedCount = (agreementsNow[token].usedCount || 0) + 1;
+      if(agreementsNow[token].usedCount >= (agreementsNow[token].maxUses || 1)) {
+        agreementsNow[token].used = true;
+      }
+      saveAgreements(agreementsNow);
+
+      // generate PDF (same approach you had)
+      try {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-        const pacifico = "Pacifico";
         doc.setFontSize(10);
 
         let textContent = "";
         document.querySelectorAll('.container p, .container ul, .container h3').forEach((el) => {
-          textContent += el.innerText + "\n\n";
+          textContent += el.innerText + "\\n\\n";
         });
 
         const lines = doc.splitTextToSize(textContent, 520);
         let y = 40;
         lines.forEach(line => {
-          if (y > 780) {
-            doc.addPage();
-            y = 40;
-          }
+          if (y > 780) { doc.addPage(); y = 40; }
           doc.text(line, 40, y);
           y += 14;
         });
 
-        // Signatures block
         y += 30;
         doc.setFont("helvetica", "bold");
         doc.text("Dispatcher Name: Sagheer Ahmed", 40, y);
@@ -214,18 +172,31 @@
         doc.text(`${name}`, 350, y);
 
         doc.save("Freight_Dispatch_Agreement.pdf");
+      } catch(e){
+        console.warn('PDF generation failed', e);
+      }
 
-        emailjs.send("service_gc8oime", "template_96zlgv8", {
-          carrier_name: name,
-          signed_at: new Date().toLocaleString()
-        }).then(() => {
-          window.location.href = "https://zabi1112.github.io/Carrier-Agreement-Form/success.html";
-        }).catch((error) => {
-          console.error("Email send FAILED", error);
-          alert("Submission failed. Please try again later.");
-        });
-      });
+      // optionally send email via emailjs (if configured). We'll try if emailjs is present.
+      try {
+        if(window.emailjs){
+          emailjs.send("service_gc8oime", "template_96zlgv8", {
+            carrier_name: name,
+            signed_at: new Date().toLocaleString()
+          }).catch(()=>{ /* ignore email failures */ });
+        }
+      } catch(e){ console.warn(e); }
+
+      // redirect to success page
+      window.location.href = 'success.html';
     });
-  </script>
+
+    // reject button
+    document.getElementById('rejectBtn').addEventListener('click', () => {
+      window.location.href = 'rejected.html';
+    });
+
+    showStatus('This link is valid. Please sign below to complete the agreement.');
+  })();
+</script>
 </body>
 </html>
