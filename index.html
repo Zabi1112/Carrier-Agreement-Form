@@ -26,10 +26,10 @@
 
     <div id="agreementContent" style="display:none">
       <p><strong>Effective Date:</strong> <span id="effectiveDate"></span></p>
-      <p><strong>Between:</strong> Optimus Prime Dispatch ("Dispatch") and <span id="companyNameDisplay"></span> ("Carrier") MC# <span id="companyMCDisplay"></span></p>
+      <p><strong>Between:</strong> Get Moving Logistics ("Dispatch") and <span id="companyNameDisplay"></span> ("Carrier") MC# <span id="companyMCDisplay"></span></p>
 
       <h3>Documentation</h3>
-      <p>Client must furnish to Optimus Prime Dispatch LLC the following documents:</p>
+      <p>Client must furnish to Get Moving Logistics the following documents:</p>
       <ul>
         <li>MC Authority Letter</li>
         <li>Certificate of Insurance</li>
@@ -77,7 +77,7 @@
       <h3>Signatures</h3>
       <div class="signature-block" style="display:flex;justify-content:space-between;margin:24px 0">
         <div style="width:45%;text-align:center">
-          <div class="signature">Usama Khan</div>
+          <div class="signature">Sagheer Ahmed</div>
           <div class="signature-label">Dispatch Signature</div>
         </div>
         <div style="width:45%;text-align:center">
@@ -88,9 +88,9 @@
 
       <h3>Important Disclaimer</h3>
       <p>
-        Optimus Prime Dispatch is owned and run by ‘Artifae Tech LLC’ which is registered in the state of Wyoming<br>
-        with the Employer Identification Number (EIN) 30-1327737. All Payments to Optimus Prime Dispatch will be
-        made to the Business Account of Artifae Tech or via the Cash App to the handle <strong>$UsamaKhan</strong>.
+        Get Moving Logistics is owned and run by ‘Black Matter LLC’ which is registered in the state of Wyoming<br>
+        with the Employer Identification Number (EIN) 30-1327737. All Payments to Get Moving Logistics will be
+        made to the Business Account of Black Matter or via the Cash App to the handle <strong>$SagheerAhmed</strong>.
       </p>
 
       <form id="agreementForm">
@@ -165,10 +165,10 @@
         lines.forEach(line => { if (y > 780) { doc.addPage(); y = 40; } doc.text(line, 40, y); y += 14; });
         y += 30;
         doc.setFont("helvetica","bold");
-        doc.text("Dispatcher Name: Usama Khan", 40, y);
+        doc.text("Dispatcher Name: Sagheer Ahmed", 40, y);
         y += 20;
         doc.setFont("Pacifico");
-        doc.text("Usama Khan", 40, y);
+        doc.text("Sagheer Ahmed", 40, y);
         doc.setFont("helvetica","bold");
         doc.text(`Carrier Name: ${name}`, 350, y-20);
         y += 20;
